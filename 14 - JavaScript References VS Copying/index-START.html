@@ -1,18 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Reference VS Copy</title>
 </head>
+
 <body>
 
   <script>
     // start with strings, numbers and booleans
 
+    let x = 10;
+
+    let y = x;
+
+    console.log(x, y);
+
+    x = 20;
+
+    console.log(x, y);
+
+    let name = "Mohana Naga Venkat";
+
+    let nickname = name;
+
+    console.log(name, nickname);
+
+    name = 'somethingele';
+
+    console.log(name, nickname);
+
     // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+
+    const players = ['Mohana', 'Naga', 'Venkat', 'Something'];
 
     // and we want to make a copy of it.
+
+    const team = players;
+
+    team[3] = "Sayempu";
+
+    console.log(team, players);
 
     // You might think we can just do something like this:
 
@@ -28,9 +57,17 @@
 
     // one way
 
+    const way1 = players.slice();
+
     // or create a new array and concat the old one in
 
+    const way2 = [].concat(players);
+
     // or use the new ES6 Spread
+
+    const way3 = [...players];
+
+    const way4 = Array.from(players);
 
     // now when we update it, the original one isn't changed
 
@@ -38,19 +75,26 @@
 
     // with Objects
     const person = {
-      name: 'Wes Bos',
-      age: 80
+      name: 'Mohana Naga Venkat',
+      age: 20
     };
 
     // and think we make a copy:
 
     // how do we take a copy instead?
 
+    const copy = Object.assign({}, person);
+
     // We will hopefully soon see the object ...spread
 
+    const copy2 = { ...person };
+
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+
+    const deepCopy = JSON.parse(JSON.stringify(person));
 
   </script>
 
 </body>
+
 </html>
