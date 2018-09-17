@@ -1,22 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
+    <input type="text" id="search" class="search" placeholder="City or State">
     <ul class="suggestions">
       <li>Filter for a city</li>
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    const endpoint =
+      'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-</script>
-  </body>
+    let cities = [];
+
+    let filteredCities = [];
+
+    fetch(endpoint)
+      .then(blob => blob.json())
+      .then(data => {
+        cities = data;
+        suggestions.innerHTML = cities.map(city => `<li>${city.city} <span> ${city.state} </span> </li>`).join('');
+      })
+      .catch(err => console.error(err));
+
+    const suggestions = document.querySelector('.suggestions');
+
+    const searchInput = document.querySelector('#search');
+
+    searchInput.addEventListener('input', filterCities);
+
+    function filterCities(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      if (searchTerm == "") {
+        filteredCities = cities;
+        displaySuggestions();
+        return;
+      }
+      filteredCities = cities.filter(city => city.city.toLowerCase().includes(searchTerm) || city.state.toLowerCase()
+        .includes(
+          searchTerm));
+      displaySuggestions()
+    }
+
+    function displaySuggestions() {
+      console.log(filteredCities);
+      suggestions.innerHTML = filteredCities.map(city => `<li>${city.city} <span> ${city.state} </span> </li>`).join('');
+    }
+  </script>
+</body>
+
 </html>
