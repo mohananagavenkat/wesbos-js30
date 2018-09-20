@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Videos</title>
 </head>
+
 <body>
   <ul class="videos">
     <li data-time="5:43">
@@ -181,7 +183,24 @@
       Video 58
     </li>
   </ul>
-<script>
-</script>
+  <script>
+    const timeEle = [...document.querySelectorAll("[data-time]")];
+    const time = timeEle.map(ele => ele.dataset.time).map(time => {
+      let [min, sec] = time.split(":");
+      return parseFloat(min * 60) + parseFloat(sec);
+    })
+    console.log(time);
+    const totalTime = time.reduce((sum, current) => sum + current, 0);
+    console.log(totalTime);
+    console.log(formatTime(totalTime));
+    console.log(formatTime(7400));
+    function formatTime(sec) {
+      let hours = sec / 3600;
+      let min = (sec % 3600) / 60;
+      let seconds = (sec % 3600) % 60;
+      return `${Math.floor(hours)}h${Math.floor(min)}m${seconds}s`;
+    }
+  </script>
 </body>
+
 </html>
