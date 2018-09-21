@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Mouse Shadow</title>
 </head>
+
 <body>
 
   <div class="hero">
@@ -11,30 +13,64 @@
   </div>
 
   <style>
-  html {
-    color:black;
-    font-family: sans-serif;
-  }
+    html {
+      color: black;
+      font-family: sans-serif;
+    }
 
-  body {
-    margin: 0;
-  }
+    body {
+      margin: 0;
+    }
 
-  .hero {
-    min-height: 100vh;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    color:black;
-  }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      background: #fc6000;
+    }
 
-  h1 {
-    text-shadow: 10px 10px 0 rgba(0,0,0,1);
-    font-size: 100px;
-  }
+    h1 {
+      font-size: 100px;
+    }
   </style>
 
-<script>
-</script>
+  <script>
+    const hero = document.querySelector(".hero");
+    const h1 = hero.querySelector("h1");
+    const shadowMove = 50;
+
+    hero.addEventListener("mousemove", moveShadow, true);
+    hero.addEventListener("mousemove", function () {
+      console.log("This is third mouse move event handler");
+    });
+
+    function moveShadow(event) {
+      console.log("This is event target element : ", event.target);
+      console.log("This is event current Trgate element : ", event.currentTarget);
+      console.log("This is this element : ", this);
+      const middleX = this.offsetWidth / 2;
+      const middleY = this.offsetHeight / 2;
+      let mouseX = event.offsetX;
+      let mouseY = event.offsetY;
+      if (this !== event.target) {
+        mouseX += event.target.offsetLeft;
+        mouseY += event.target.offsetTop;
+      }
+      let shadowMoveX = shadowMove / middleX;
+      let shadowMoveY = shadowMove / middleY;
+      console.log(middleX, middleY, mouseX, mouseY, shadowMoveX, shadowMoveY);
+      //return;
+      let shadowX, shadowY;
+      shadowX = mouseX < middleX ? -(middleX - mouseX) * shadowMoveX : (mouseX - middleX) * shadowMoveX
+      shadowY = mouseY < middleY ? -(middleY - mouseY) * shadowMoveY : (mouseY - middleY) * shadowMoveY
+      console.log(shadowX, shadowY);
+      h1.style.textShadow = `${shadowX}px ${shadowY}px 0 rgba(0, 0, 0, .5)`;
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+  </script>
 </body>
+
 </html>
