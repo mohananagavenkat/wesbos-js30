@@ -28,7 +28,8 @@
       .then(blob => blob.json())
       .then(data => {
         cities = data;
-        suggestions.innerHTML = cities.map(city => `<li>${city.city} <span> ${city.state} </span> </li>`).join('');
+        filteredCities = data;
+        displaySuggestions();
       })
       .catch(err => console.error(err));
 
@@ -48,12 +49,29 @@
       filteredCities = cities.filter(city => city.city.toLowerCase().includes(searchTerm) || city.state.toLowerCase()
         .includes(
           searchTerm));
-      displaySuggestions()
+      displaySuggestions(searchTerm)
     }
 
-    function displaySuggestions() {
+    function numberWithCommas(something) {
+      return something;
+    }
+
+    function displaySuggestions(searchTerm = "") {
       console.log(filteredCities);
-      suggestions.innerHTML = filteredCities.map(city => `<li>${city.city} <span> ${city.state} </span> </li>`).join('');
+      let reg;
+      reg = new RegExp(searchTerm, "gi");
+      suggestions.innerHTML = filteredCities.map(city => {
+        let cityName, stateName;
+        if (searchTerm) {
+          cityName = city.city.replace(reg, `<span class="hl" >${searchTerm}</span>`);
+          stateName = city.state.replace(reg, `<span class="hl" >${searchTerm}</span>`);
+        } else {
+          cityName = city.city;
+          stateName = city.state;
+        }
+        return `<li><span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(city.population)}</span></li>`
+      }).join('');
     }
   </script>
 </body>
