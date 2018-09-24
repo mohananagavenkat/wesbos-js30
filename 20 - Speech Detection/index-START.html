@@ -1,45 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Speech Detection</title>
-</head>
-<body>
-
-  <div class="words" contenteditable>
-  </div>
-
-<script>
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-
-</script>
-
-
   <style>
     html {
       font-size: 10px;
     }
 
     body {
-      background:#ffc600;
+      background: #ffc600;
       font-family: 'helvetica neue';
       font-weight: 200;
       font-size: 20px;
     }
 
     .words {
-      max-width:500px;
-      margin:50px auto;
-      background:white;
-      border-radius:5px;
-      box-shadow:10px 10px 0 rgba(0,0,0,0.1);
-      padding:1rem 2rem 1rem 5rem;
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem 1rem 5rem;
       background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
       background-size: 100% 3rem;
       position: relative;
-      line-height:3rem;
+      line-height: 3rem;
     }
+
     p {
       margin: 0 0 3rem;
     }
@@ -54,7 +43,52 @@
       border: 1px solid;
       border-color: transparent #efe4e4;
     }
+
+    h2 {
+      text-align: center;
+      color: #fff;
+    }
   </style>
+</head>
+
+<body>
+  <h2>Start Speaking</h2>
+  <div class="words" contenteditable>
+  </div>
+
+  <script>
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true;
+
+    let p;
+
+    const words = document.querySelector(".words");
+
+    function createP() {
+      p = document.createElement("P");
+      words.appendChild(p);
+    }
+
+    createP();
+
+    recognition.addEventListener("result", function (event) {
+      console.log(event);
+      let speech = "";
+      const result = event.results[0];
+      speech = result[0].transcript;
+      p.textContent = speech;
+      if (result.isFinal) { createP(); }
+    });
+
+
+    recognition.addEventListener("end", recognition.start);
+
+    recognition.start();
+
+  </script>
 
 </body>
+
 </html>
