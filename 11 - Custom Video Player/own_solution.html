@@ -34,15 +34,16 @@
             flex-basis: 100%;
             height:.5rem;
             background:lightgray;
+            cursor: pointer;
         }
         .player-controls *:not([class^="progress"]){
             flex:1;
             margin:8px;
         }
         .player-controls .progress-filled{
-            width:50%;
+            width:0%;
             height:100%;
-            background: #fb6;
+            background: #714713;
         }
     </style>
 </head>
@@ -91,12 +92,29 @@
             video.currentTime += parseFloat(this.dataset.skip);
         }
 
+        function fillProgress() {
+            console.log("progress updated");
+            progressFilled.style.width = `${(video.currentTime/video.duration)*100}%`;
+        }
+
+        function updateProgress(e) {
+            video.currentTime = parseFloat((e.offsetX / e.currentTarget.offsetWidth) * video.duration);
+            // console.log(e.offsetX);
+            // console.log(e.currentTarget.offsetWidth);
+        }
+
         playToggle.addEventListener("click", updatePlayState);
         video.addEventListener("click", updatePlayState)
         video.addEventListener("play", updateToggleButton);
         video.addEventListener("pause", updateToggleButton);
         ranges.forEach(range => range.addEventListener("change", manageRanges));
         skips.forEach(skip => skip.addEventListener("click", manageSkips));
+        video.addEventListener("timeupdate", fillProgress);
+        let progressPressed = false;
+        progress.addEventListener("mousedown", () => progressPressed = true);
+        progress.addEventListener("mouseup", () => progressPressed = false);
+        progress.addEventListener("mousemove", (e) => progressPressed && updateProgress(e));
+        progress.addEventListener("click", (e) => updateProgress(e));
     </script>
 </body>
 
