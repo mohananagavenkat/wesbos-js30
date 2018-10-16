@@ -7,42 +7,49 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Custom Video Player</title>
     <style>
-        .wrapper{
-            width:100%;
-            min-height:100vh;
+        .wrapper {
+            width: 100%;
+            min-height: 100vh;
             background: #fb6000;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .player{
+
+        .player {
             position: relative;
         }
-        .player video{
+
+        .player video {
             display: block;
         }
-        .player .player-controls{
+
+        .player .player-controls {
             position: absolute;
-            bottom:0;
+            bottom: 0;
             width: 100%;
             display: flex;
             align-items: center;
             /* justify-content: center; */
             flex-wrap: wrap;
+            display: none;
         }
-        .player-controls .progress{
+
+        .player-controls .progress {
             flex-basis: 100%;
-            height:.5rem;
-            background:lightgray;
+            height: .5rem;
+            background: lightgray;
             cursor: pointer;
         }
-        .player-controls *:not([class^="progress"]){
-            flex:1;
-            margin:8px;
+
+        .player-controls *:not([class^="progress"]) {
+            flex: 1;
+            margin: 8px;
         }
-        .player-controls .progress-filled{
-            width:0%;
-            height:100%;
+
+        .player-controls .progress-filled {
+            width: 0%;
+            height: 100%;
             background: #714713;
         }
     </style>
@@ -61,7 +68,7 @@
                 <input type="range" name="volume" id="volume" min="0" max="1" value="1" step="0.1">
                 <button class="skip" data-skip="-10">
                     << 10s </button> <button class="skip" data-skip="10"> >> 10s
-                </button>
+                        </button>
             </div>
         </div>
     </div>
@@ -94,13 +101,17 @@
 
         function fillProgress() {
             console.log("progress updated");
-            progressFilled.style.width = `${(video.currentTime/video.duration)*100}%`;
+            progressFilled.style.width = `${(video.currentTime / video.duration) * 100}%`;
         }
 
         function updateProgress(e) {
             video.currentTime = parseFloat((e.offsetX / e.currentTarget.offsetWidth) * video.duration);
             // console.log(e.offsetX);
             // console.log(e.currentTarget.offsetWidth);
+        }
+
+        function displayControls() {
+            playerControls.style.display = "flex";
         }
 
         playToggle.addEventListener("click", updatePlayState);
@@ -115,6 +126,7 @@
         progress.addEventListener("mouseup", () => progressPressed = false);
         progress.addEventListener("mousemove", (e) => progressPressed && updateProgress(e));
         progress.addEventListener("click", (e) => updateProgress(e));
+        video.addEventListener("canplay", displayControls);
     </script>
 </body>
 
